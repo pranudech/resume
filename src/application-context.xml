@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:lang="http://www.springframework.org/schema/lang"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+        
+	<!-- to activate annotations in beans already registered in the application context -->
+	<context:annotation-config />
+
+	<!-- scans packages to find and register beans within the application context -->
+	<context:component-scan base-package="com.spring.jdbc.curd.*" />
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+        p:location="application.jdbc.properties" />
+
+	<!-- dataSource configuration -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${main.jdbc.driver}" />
+		<property name="url" value="${main.jdbc.url}" />
+		<property name="username" value="${main.jdbc.username}" />
+		<property name="password" value="${main.jdbc.password}" />
+	</bean>
+
+	<!-- jdbcTemplate uses dataSource -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:annotation-driven  transaction-manager="transactionManager"/>
+	
+	<!-- ############################################################################################## -->
+	
+	<bean id="homeDao" class="com.index.dao.jdbc.HomeDaoJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+<!-- 	<bean id="permissionDao" class="com.dashboard.permission.dao.jdbc.PermissionDaoJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="menuDao" class="com.dashboard.menu.dao.jdbc.MenuDaoJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="permissionManager" class="com.dashboard.permission.manager.impl.PermissionManager">
+		<property name="permissionDao" ref="permissionDao"></property>
+		<property name="loginDao" ref="loginDao"></property>
+		<property name="menuDao" ref="menuDao"></property>
+	</bean>
+	
+	<bean id="productDao" class="com.dashboard.product.dao.jdbc.ProductDaoJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="classDetailDao" class="com.dashboard.cassdetail.dao.jdbc.ClassDetailDaoJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="billDao" class="com.dashboard.bill.dao.jdbc.BillDaoJdbc">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean> -->
+
+</beans>
